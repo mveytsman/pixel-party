@@ -4,10 +4,10 @@ defmodule PixelPartyWeb.PageLive do
   def render(assigns) do
     ~L"""
     <div id="last_clicked">Last clicked: <%= inspect @last_clicked %></div>
-      <div id="grid" class="grid">
-        <%= for y <- 0..(@height-1), x <- 0..(@height-1) do %>
-          <div id="<%= x %>,<%= y %>" class="grid-cell <%= @grid[{x,y}] %>"
-              phx-click="click" phx-value-id="<%= x %>,<%= y %>"></div>
+      <div id="grid" class="grid" phx-update="append">
+        <%= for y <- 0..(@height-1), x <- 0..(@height-1), Map.has_key?(@render_grid, {x,y}) do %>
+        <div id="<%= x %>,<%= y %>" class="grid-cell <%= @render_grid[{x,y}] %>"
+        phx-click="click" phx-value-id="<%= x %>,<%= y %>"></div>
         <% end %>
       </div>
     """
@@ -24,9 +24,10 @@ defmodule PixelPartyWeb.PageLive do
        width: width,
        height: height,
        grid: grid,
+       render_grid: grid,
        last_clicked: nil,
        last_color: :black
-     )}
+     ), temporary_assigns: [render_grid: %{}]}
   end
 
   def handle_event(
@@ -46,6 +47,7 @@ defmodule PixelPartyWeb.PageLive do
     {:noreply,
      assign(socket, :last_clicked, id)
      |> assign(:grid, Map.put(grid, id, color))
+     |> assign(:render_grid, %{id => color})
      |> assign(:last_color, color)}
   end
 
