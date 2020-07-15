@@ -89,3 +89,63 @@
 .alert:empty {
   display: none;
 }
+
+/* My CSS */
+
+body {
+  background: lightgray;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(30, 25px);
+  margin-top: 3em;
+}
+
+.grid-cell {
+  border: 1px solid black;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+}
+
+
+.grid-cell.white {
+  background-color: white;
+}
+
+.grid-cell.black {
+  background-color: black;
+}
+
+.grid-cell.gray {
+  background-color: gray;
+}
+
+.grid-cell.red {
+  background-color: red;
+}
+
+.grid-cell.orange {
+  background-color: orange;
+}
+
+.grid-cell.yellow {
+  background-color: yellow;
+}
+
+.grid-cell.green {
+  background-color: green;
+}
+
+.grid-cell.blue {
+  background-color: blue;
+}
+
+.grid-cell.indigo {
+  background-color: indigo;
+}
+
+.grid-cell.violet {
+  background-color: violet;
+}
