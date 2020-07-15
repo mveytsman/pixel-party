@@ -17,13 +17,36 @@ defmodule PixelPartyWeb.PageLive do
   def mount(_params, _session, socket) do
     width = 30
     height = 30
-    grid = for x <- 0..(width-1), y <- 0..(height-1), into: %{}, do: {{x,y}, :white}
-    {:ok, assign(socket, width: width, height: height, grid: grid, last_clicked: nil, last_color: nil)}
+    grid = for x <- 0..(width - 1), y <- 0..(height - 1), into: %{}, do: {{x, y}, :white}
+
+    {:ok,
+     assign(socket,
+       width: width,
+       height: height,
+       grid: grid,
+       last_clicked: nil,
+       last_color: :black
+     )}
   end
 
-  def handle_event("click", %{"id" => id}, %{assigns: %{grid: grid}}=socket) do
-    id = id |> String.split(",") |> Enum.map(&(String.to_integer(&1))) |> List.to_tuple
-    {:noreply, assign(socket, :last_clicked, id) |> assign(:grid, Map.put(grid, id, next_color(grid[id])))}
+  def handle_event(
+        "click",
+        %{"id" => id},
+        %{assigns: %{last_clicked: last_clicked, last_color: last_color, grid: grid}} = socket
+      ) do
+    id = id |> String.split(",") |> Enum.map(&String.to_integer(&1)) |> List.to_tuple()
+
+    color =
+      if last_clicked != id do
+        last_color
+      else
+        next_color(grid[id])
+      end
+
+    {:noreply,
+     assign(socket, :last_clicked, id)
+     |> assign(:grid, Map.put(grid, id, color))
+     |> assign(:last_color, color)}
   end
 
   def next_color(:white), do: :black
