@@ -12,9 +12,9 @@ defmodule PixelParty.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: PixelParty.PubSub},
       # Start the Endpoint (http/https)
-      PixelPartyWeb.Endpoint
+      PixelPartyWeb.Endpoint,
       # Start a worker by calling: PixelParty.Worker.start_link(arg)
-      # {PixelParty.Worker, arg}
+       PixelParty.Grid
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -18,7 +18,7 @@ defmodule PixelPartyWeb.PageLive do
   def mount(_params, _session, socket) do
     width = 30
     height = 25
-    grid = for x <- 0..(width - 1), y <- 0..(height - 1), into: %{}, do: {{x, y}, :white}
+    grid = PixelParty.Grid.viewport({0,0}, width, height)
 
     {:ok,
      assign(socket,
@@ -36,19 +36,21 @@ defmodule PixelPartyWeb.PageLive do
         %{"id" => id},
         %{assigns: %{last_clicked: last_clicked, last_color: last_color, grid: grid}} = socket
       ) do
-    id = id |> String.split(",") |> Enum.map(&String.to_integer(&1)) |> List.to_tuple()
+    pos = id |> String.split(",") |> Enum.map(&String.to_integer(&1)) |> List.to_tuple()
 
     color =
-      if last_clicked != id do
+      if last_clicked != pos do
         last_color
       else
-        next_color(grid[id])
+        next_color(grid[pos])
       end
 
+    PixelParty.Grid.set(pos, color)
+
     {:noreply,
-     assign(socket, :last_clicked, id)
-     |> assign(:grid, Map.put(grid, id, color))
-     |> assign(:render_grid, %{id => color})
+     assign(socket, :last_clicked, pos)
+     |> assign(:grid, Map.put(grid, pos, color))
+     |> assign(:render_grid, %{pos => color})
      |> assign(:last_color, color)}
   end
 
