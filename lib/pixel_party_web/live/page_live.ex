@@ -4,7 +4,8 @@ defmodule PixelPartyWeb.PageLive do
   def render(assigns) do
     ~L"""
     <h1>Pixel Party</h1>
-    <div id="last_clicked">Origin: <%= inspect @origin %>, Last clicked: <%= inspect @last_clicked %>, Other players: <%= Enum.count(@presence) -1 %></div>
+    <p>Click to color, Arrows or WASD to move the screen!</p>
+    <div id="debug">Origin: <%= inspect @origin %>, Last clicked: <%= inspect @last_clicked %>, Other players: <%= Enum.count(@presence) -1 %></div>
     <div id="grid" class="grid" phx-update="append" phx-window-keydown="keydown">
       <%= for y <- 0..(@height-1), x <- 0..(@width-1), Map.has_key?(@render_grid, {x,y}) do %>
       <div id="<%= x %>-<%= y %>" class="grid-cell <%= @render_grid[{x,y}] %>"
