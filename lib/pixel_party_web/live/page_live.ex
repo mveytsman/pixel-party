@@ -6,10 +6,9 @@ defmodule PixelPartyWeb.PageLive do
     <h1>Pixel Party</h1>
     <p>Click to color, Arrows or WASD to move the screen!</p>
     <div id="debug">Origin: <%= inspect @origin %>, Last clicked: <%= inspect @last_clicked %>, Other players: <%= Enum.count(@presence) -1 %></div>
-    <div id="grid" class="grid" phx-update="append" phx-window-keydown="keydown">
+    <div id="grid" class="grid" phx-window-keydown="keydown">
       <%= for y <- 0..(@height-1), x <- 0..(@width-1), Map.has_key?(@render_grid, {x,y}) do %>
-      <div id="<%= x %>-<%= y %>" class="grid-cell <%= @render_grid[{x,y}] %>"
-      phx-click="click" phx-value-id="<%= x %>,<%= y %>"></div>
+        <%= live_component @socket, PixelParty.GridCellComponent, id: {x,y}, x: x, y: y, color: @render_grid[{x,y}] %>
       <% end %>
     </div>
     """
@@ -98,10 +97,13 @@ defmodule PixelPartyWeb.PageLive do
   @impl true
   def handle_info(
         {:color_changed, {x, y}, color},
-        %{assigns: %{origin: {x_origin, y_origin}}} = socket
+        %{assigns: %{origin: {x_origin, y_origin}, width: width, height: height}} = socket
       ) do
-    translated_position = {x - x_origin, y - y_origin}
-    {:noreply, assign(socket, :render_grid, %{translated_position => color})}
+    translated_position = {x_t, y_t} = {x - x_origin, y - y_origin}
+    if x_t >= 0 && x_t < width && y_t >= 0 && y_t < height do
+      send_update PixelParty.GridCellComponent, id: translated_position, color: color
+    end
+    {:noreply, socket}
   end
 
   @impl true

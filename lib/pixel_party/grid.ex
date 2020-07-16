@@ -7,7 +7,7 @@ defmodule PixelParty.Grid do
 
   def viewport({x_origin, y_origin}, width, height) do
     Agent.get(__MODULE__, fn grid ->
-      for y <- y_origin..height-1, x <- x_origin..width-1, into: %{}, do: {{x,y}, Map.get(grid, {x,y}, :white)}
+      for y <- y_origin..(y_origin+height-1), x <- x_origin..(x_origin+width-1), into: %{}, do: {{x,y}, Map.get(grid, {x,y}, :white)}
     end)
   end
 
@@ -35,5 +35,5 @@ defmodule PixelParty.Grid do
   def next_color(:green), do: :blue
   def next_color(:blue), do: :indigo
   def next_color(:indigo), do: :violet
-  def next_color(:violet), do: :black
+  def next_color(:violet), do: :white
 end
