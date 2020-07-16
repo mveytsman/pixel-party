@@ -34,7 +34,7 @@ defmodule PixelParty.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.5.3"},
-      {:phoenix_live_view, git: "git@github.com:mveytsman/phoenix_live_view.git", branch: "dom_patching_bug"},
+      {:phoenix_live_view, git: "https://github.com/mveytsman/phoenix_live_view.git", branch: "dom_patching_bug"},
       {:floki, ">= 0.0.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
