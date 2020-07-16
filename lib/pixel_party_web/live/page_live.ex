@@ -3,10 +3,11 @@ defmodule PixelPartyWeb.PageLive do
   @impl true
   def render(assigns) do
     ~L"""
+    <h1>Pixel Party</h1>
     <div id="last_clicked">Last clicked: <%= inspect @last_clicked %></div>
       <div id="grid" class="grid" phx-update="append">
-        <%= for y <- 0..(@height-1), x <- 0..(@height-1), Map.has_key?(@render_grid, {x,y}) do %>
-        <div id="<%= x %>,<%= y %>" class="grid-cell <%= @render_grid[{x,y}] %>"
+        <%= for y <- 0..(@height-1), x <- 0..(@width-1), Map.has_key?(@render_grid, {x,y}) do %>
+        <div id="<%= x %>-<%= y %>" class="grid-cell <%= @render_grid[{x,y}] %>"
         phx-click="click" phx-value-id="<%= x %>,<%= y %>"></div>
         <% end %>
       </div>
@@ -16,7 +17,7 @@ defmodule PixelPartyWeb.PageLive do
   @impl true
   def mount(_params, _session, socket) do
     width = 30
-    height = 30
+    height = 25
     grid = for x <- 0..(width - 1), y <- 0..(height - 1), into: %{}, do: {{x, y}, :white}
 
     {:ok,
