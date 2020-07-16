@@ -13,6 +13,9 @@ defmodule PixelParty.Application do
       {Phoenix.PubSub, name: PixelParty.PubSub},
       # Start the Endpoint (http/https)
       PixelPartyWeb.Endpoint,
+
+      PixelParty.Presence,
+
       # Start a worker by calling: PixelParty.Worker.start_link(arg)
        PixelParty.Grid
     ]
