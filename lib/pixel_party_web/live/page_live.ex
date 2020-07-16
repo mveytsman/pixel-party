@@ -20,6 +20,10 @@ defmodule PixelPartyWeb.PageLive do
     height = 25
     grid = PixelParty.Grid.viewport({0, 0}, width, height)
 
+    if connected?(socket) do
+      Phoenix.PubSub.subscribe(PixelParty.PubSub, "grid")
+    end
+
     {:ok,
      assign(socket,
        width: width,
@@ -30,6 +34,7 @@ defmodule PixelPartyWeb.PageLive do
      ), temporary_assigns: [render_grid: %{}]}
   end
 
+  @impl true
   def handle_event(
         "click",
         %{"id" => id},
@@ -48,5 +53,10 @@ defmodule PixelPartyWeb.PageLive do
      assign(socket, :last_clicked, pos)
      |> assign(:render_grid, %{pos => color})
      |> assign(:last_color, color)}
+  end
+
+  @impl true
+  def handle_info({:color_changed, pos, color}, socket) do
+    {:noreply, assign(socket, :render_grid, %{pos => color})}
   end
 end

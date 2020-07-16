@@ -14,12 +14,14 @@ defmodule PixelParty.Grid do
   def change_color(pos)  do
     Agent.get_and_update(__MODULE__, fn grid ->
       new_color = next_color(Map.get(grid, pos, :white))
+      Phoenix.PubSub.broadcast(PixelParty.PubSub, "grid", {:color_changed, pos, new_color})
       {new_color, Map.put(grid, pos, new_color)}
     end)
   end
 
   def change_color(pos, color) do
     Agent.get_and_update(__MODULE__, fn grid ->
+      Phoenix.PubSub.broadcast(PixelParty.PubSub, "grid", {:color_changed, pos, color})
       {color, Map.put(grid, pos, color)}
     end)
   end
